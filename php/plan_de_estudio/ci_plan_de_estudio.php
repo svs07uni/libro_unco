@@ -215,7 +215,7 @@ class ci_plan_de_estudio extends toba_ci
                     $mat['observacion'] = $obs[0];
                     $this->dep('datos')->tabla('obs_mat')->cargar($obs);
                 }print_r($obs);
-                $mat['optativa'] = ''
+                $mat['optativa'] = '';
                 //$mat['optativa'] = $mat['optativa']?'Si':'No';
                 //$mat = $this->dep('datos')->tabla('materia')->get_listado($filtro);print_r($mat);
                 return $mat;

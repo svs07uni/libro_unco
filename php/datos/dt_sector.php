@@ -5,13 +5,19 @@ class dt_sector extends toba_datos_tabla
 	{
             $where = array();
             if(isset($filtro['nombre'])){
-                $where[] = 'nombre ILIKE '.quote("%{$filtro['nombre'][valor]}%");
+                $where[] = 't_s.nombre ILIKE '.quote("%{$filtro['nombre'][valor]}%");
             }
             if(isset($filtro['nombre_persona'])){
                 $where[] = 'nombre_persona ILIKE '.quote("%{$filtro['nombre_persona']['valor']}%");
             }
             if(isset($filtro['apellido_persona'])){
                 $where[] = 'apellido_persona ILIKE '.quote("%{$filtro['apellido_persona']['valor']}%");
+            }
+            if(isset($filtro['sigla'])){
+                $where[] = 'sigla ILIKE '.quote("%{$filtro['sigla']['valor']}%");
+            }
+            if(isset($filtro['id_sector'])){
+                $where[] = 'id_sector = '.$filtro['id_sector']['valor'];
             }
 		$sql = "SELECT
 			t_s.id_sector,
@@ -39,13 +45,13 @@ class dt_sector extends toba_datos_tabla
 	{
             $where = array();
             if(isset($filtro['nombre'])){
-                $where[] = 'nombre ILIKE '.quote("%{$filtro['nombre'][valor]}%");
+                $where[] = 't_s.nombre ILIKE '.quote("%{$filtro['nombre']['valor']}%");
             }
             if(isset($filtro['nombre_persona'])){
-                $where[] = 'nombre_persona ILIKE '.quote("%{$filtro['nombre_persona']['valor']}%");
+                $where[] = 't_p.nombre ILIKE '.quote("%{$filtro['nombre_persona']['valor']}%");
             }
             if(isset($filtro['apellido_persona'])){
-                $where[] = 'apellido_persona ILIKE '.quote("%{$filtro['apellido_persona']['valor']}%");
+                $where[] = 't_p.apellido ILIKE '.quote("%{$filtro['apellido_persona']['valor']}%");
             }
 		$sql = "SELECT
 			t_s.id_sector,

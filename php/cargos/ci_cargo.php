@@ -2,7 +2,15 @@
 class ci_cargo extends ci_cargos
 {
     protected $s__datos_filtro;
-        //-----------------------------------------------------------------------------------
+    
+        function conf(){
+            if(isset($this->controlador->s__pantalla)){
+                $this->set_pantalla($this->controlador->s__pantalla);
+                $this->controlador->s__pantalla = null;
+            }
+        }
+
+//-----------------------------------------------------------------------------------
 	//---- pant_dato_cargo -------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------
@@ -11,32 +19,50 @@ class ci_cargo extends ci_cargos
 
 	function conf__form_cargo(libro_unco_ei_formulario $form)
 	{
-            if ($this->controlador()->dep('datos')->esta_cargada()) {
-                    $ar = $this->controlador()->dep('datos')->tabla('sector')->get();
-                    $ar['nombre'] = utf8_decode($ar['nombre']);
-                    $ar['nombre_masc'] = utf8_decode($ar['nombre_masc']);
-                    $ar['nombre_fem'] = utf8_decode($ar['nombre_fem']);
-                    return $ar;
+            if (isset($this->controlador->s__id_sector)) {
+                $ar = $this->controlador()->dep('datos')->tabla('sector')->get();
+                if(!isset($ar)){//No está en memoria, busco en BD
+                    $this->s__datos_filtro['id_sector']['valor'] = $this->controlador->s__id_sector;
+                    $cargo = $this->controlador()->dep('datos')->tabla('sector')->get_listado($this->s__datos_filtro);
+                    if(count($cargo)>0){
+                        $ar = $cargo[0];
+                        $c['id_sector'] = $this->controlador->s__id_sector;
+                        $this->controlador()->dep('datos')->tabla('sector')->cargar($c);
+                    }
+                }
+                return $ar;
 		}
-            
+            else{
+                $this->pantalla()->tab('pant_personal_cargo')->ocultar();
+                $this->pantalla()->tab('pant_descripcion')->ocultar();
+                $this->evento('guardar')->ocultar();
+                $this->evento('cancelar')->ocultar();
+            }
                 
 	}
 
 	function evt__form_cargo__guardar($datos)
 	{
-            $datos['nombre'] = utf8_encode($datos['nombre']);
-            $datos['nombre_masc'] = utf8_encode($datos['nombre_masc']);
-            $datos['nombre_fem'] = utf8_encode($datos['nombre_fem']);
+            $datos['id_unidad_academica'] = $this->controlador->s__sigla;
             $this->controlador()->dep('datos')->tabla('sector')->set($datos);
             $ar = $this->controlador()->dep('datos')->tabla('sector')->get();
             $this->controlador->s__id_sector = $ar['id_sector'];
-            print_r($this->controlador()->dep('datos')->tabla('sector')->get_proximo_id());
-	}
+        }
 
 	function evt__form_cargo__cancelar()
 	{
+            $this->controlador()->dep('datos')->tabla('sector')->resetear();
             $this->set_pantalla('pant_dato_cargo');
 	}
+        
+        function evt__form_cargo__crear($datos){
+            $datos['id_unidad_academica'] = $this->controlador->s__sigla;
+            $this->controlador()->dep('datos')->tabla('sector')->set($datos);
+            $this->controlador()->dep('datos')->tabla('sector')->sincronizar();
+            
+            $ar = $this->controlador()->dep('datos')->tabla('sector')->get();
+            $this->controlador->s__id_sector = $ar['id_sector'];
+        }
         
         //-----------------------------------------------------------------------------------
 	//---- pant_personal_cargo --------------------------------------------------------------------
@@ -47,22 +73,35 @@ class ci_cargo extends ci_cargos
 
 	function conf__form_persona(libro_unco_ei_formulario $form)
 	{
-            $filtro['id_sector']['valor'] = $this->controlador->s__id_sector;
-            $ar = $this->controlador()->dep('datos')->tabla('persona')->get_listado($filtro);
-            $ar['nombre'] = utf8_decode($ar['nombre']);
-            $ar['apellido'] = utf8_decode($ar['apellido']);
-            $ar['titulo'] = utf8_decode($ar['titulo']);
-            return $ar;
+            $persona = $this->controlador()->dep('datos')->tabla('persona')->get();
+            if(!isset($persona)){//Primero verifico si hay datos en memoria
+                $filtro['id_sector']['valor'] = $this->controlador->s__id_sector;
+                $ar = $this->controlador()->dep('datos')->tabla('persona')->get_listado($filtro);
+                if(count($ar)>0){
+                    $persona = $ar[0];
+                    $p['tipo_doc'] = $ar[0]['tipo_doc'];
+                    $p['nro_doc'] = $ar[0]['nro_doc'];
+                    $this->controlador()->dep('datos')->tabla('persona')->cargar($p);
+                    
+                }
+            }
+            if(isset($persona)){
+                if(isset($persona['genero']))
+                    $persona['genero'] = ($persona['genero'])?'Femenino':'Masculino';
+                if(isset($persona['tipo_doc']))
+                    $persona['tipo_doc'] = ($persona['tipo_doc']=='dni')?'DNI':'Pasaporte';
+                return $persona;
+            }
+            
 	}
                 
 	function evt__form_persona__guardar($datos)
 	{
-            $ar['nombre'] = utf8_encode($ar['nombre']);
-            $ar['apellido'] = utf8_encode($ar['apellido']);
-            $ar['titulo'] = utf8_encode($ar['titulo']);
+            $datos['id_sector'] = $this->controlador->s__id_sector;
+            $datos['genero'] = ($datos['genero']=='Femenino')?true:false;
+            $datos['tipo_doc'] = ($datos['tipo_doc']=='DNI')?'dni':'pas';
             $this->controlador()->dep('datos')->tabla('persona')->set($datos);
-            
-	}
+        }
 
 	function evt__form_persona__cancelar()
 	{
@@ -93,56 +132,65 @@ class ci_cargo extends ci_cargos
             unset($this->s__datos_filtro);
 	}
 
+        //-----------------------------------------------------------------------------------
+	//---- form_descripcion --------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
-	//---- cuadro_seccion --------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	function conf__cuadro_seccion(libro_unco_ei_cuadro $cuadro)
-	{
-            $this->s__datos_filtro['id_sector']['valor'] = $this->controlador->s__id_sector;
-            $cuadro->set_datos($this->controlador()->dep('datos')->tabla('seccion')->get_listado($this->s__datos_filtro));
-            
-	}
-
-	function evt__cuadro_seccion__seleccion($seleccion)
-	{
-            $this->controlador()->dep('datos')->cargar($seleccion);
-            $this->set_pantalla('pant_seccion');
-	}
+        function conf__form_descripcion(libro_unco_ei_formulario $form){
+            $seccion = $this->controlador()->dep('datos')->tabla('seccion')->get();
+            if(!isset($seccion)){//No existe observación cargada en memoria
+                //Se busca en la base de datos  
+                $filtro['id_sector']['valor'] = $this->controlador->s__id_sector;
+                $sec = $this->controlador()->dep('datos')->tabla('seccion')->get_listado($filtro);
+                if(count($sec)>0){//Existe en la BD
+                    $seccion = $sec[0];
+                    $s['id_seccion'] = $seccion['id_seccion'];
+                    $this->controlador()->dep('datos')->tabla('seccion')->cargar($s);
+                }
+            }
+            if(count($seccion)>0){//Existe en memoria
+                return $seccion;
+            }
+        }
         
-        function evt__cuadro_seccion__agregar($datos)
-	{
-            $this->controlador()->set_pantalla('pant_seccion');
-	}
-
-	function evt__cuadro_seccion__eliminar($seleccion)
-	{
-            $sql = "delete from seccion where id_seccion = '".$seleccion['id_seccion']."'";
-            toba::db('libro_unco')->consultar($sql);
-	}
+        function evt__form_descripcion__guardar($datos){
+            $datos['id_sector'] = $this->controlador->s__id_sector;
+            $this->controlador()->dep('datos')->tabla('seccion')->set($datos);
+            
+        }
+        
+	
         
         function evt__guardar(){
-            try{//Sincronizar form_cargo
+            try{//Sincronizar form_persona
                 $this->controlador()->dep('datos')->tabla('sector')->sincronizar();
-                $this->controlador()->dep('datos')->tabla('sector')->resetear();
             }catch(toba_error_validacion $e){
-                $this->set_pantalla('pant_dato_cargo');
+                
             }
+            
             try{//Sincronizar form_persona
                 $this->controlador()->dep('datos')->tabla('persona')->sincronizar();
-                $this->controlador()->dep('datos')->tabla('persona')->resetear();
             }catch(toba_error_validacion $e){
-                $this->set_pantalla('pant_personal_cargo');
+                
             }
-                      
+            try{//Sincronizar form_persona
+                $this->controlador()->dep('datos')->tabla('seccion')->sincronizar();
+            }catch(toba_error_validacion $e){
+                
+            }         
         }
         
         function evt__cancelar(){
-            $this->disparar_limpieza_memoria();
+            $this->controlador()->dep('datos')->tabla('sector')->resetear();
+            $this->controlador()->dep('datos')->tabla('persona')->resetear();
+            $this->controlador()->dep('datos')->tabla('seccion')->resetear();
         }
         
         function evt__listo(){
-            $this->set_pantalla('pant_dato_cargo');
+            $this->controlador()->dep('datos')->tabla('sector')->resetear();
+            $this->controlador->s__id_sector = null;
+            $this->controlador()->dep('datos')->tabla('persona')->resetear();
+            $this->controlador()->dep('datos')->tabla('seccion')->resetear();
+            $this->controlador()->set_pantalla('pant_cargos');
         }
     
 }

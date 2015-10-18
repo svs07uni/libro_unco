@@ -1,17 +1,30 @@
 <?php
 class dt_modulo extends toba_datos_tabla
 {
-	function get_listado($filtro=array())
+    function listar_modulos_distinto_de($id_plan, $id_modulo){
+        $and = "";
+            if(isset($id_modulo))//Se seleccionó un modulo
+                $and = " AND id_modulo <> ".$id_modulo;
+            $sql = "SELECT id_modulo, nombre FROM modulo "
+                . " WHERE id_plan = ". $id_plan
+                .$and;
+            return toba::db('libro_unco')->consultar($sql);
+    }
+    function eliminar_modulo($id_modulo){
+        $sql = "delete from modulo where id_modulo = ".$id_modulo;
+        toba::db('libro_unco')->consultar($sql);
+    }
+    function get_listado($filtro=array())
 	{
 		$where = array();
                 if (isset($filtro['nombre'])) {
-			$where[] = "nombre ILIKE ".quote("%{$filtro['nombre']['valor']}%");
+			$where[] = "t_m.nombre ILIKE ".quote("%{$filtro['nombre']['valor']}%");
 		}
 		if (isset($filtro['tipo_modulo'])) {
 			$where[] = "tipo_modulo ILIKE ".quote("%{$filtro['tipo_modulo']['valor']}%");
 		}
                 if (isset($filtro['modulo_padre'])) {
-			$where[] = "modulo_padre ILIKE ".quote("%{$filtro['modulo_padre']['valor']}%");
+			$where[] = "t_m.modulo_padre ILIKE ".quote("%{$filtro['modulo_padre']['valor']}%");
 		}
                 if (isset($filtro['id_plan'])) {
 			$where[] = "t_m.id_plan = ".$filtro['id_plan']['valor'];
@@ -40,6 +53,20 @@ class dt_modulo extends toba_datos_tabla
                 return toba::db('libro_unco')->consultar($sql);
                 
 	}
+        
+        function get_modulo_de_materia($id_materia){
+            $sql = "SELECT
+			t_m.nombre,
+                        t_tm.nombre as tipo_modulo
+		FROM
+			modulo as t_m	
+                LEFT OUTER JOIN tipo_modulo as t_tm 
+                ON (t_m.id_tipo_modulo = t_tm.id_tipo_modulo)
+                LEFT OUTER JOIN se_encuentra as t_se
+                ON (t_se.id_modulo = t_m.id_modulo)
+                WHERE t_se.id_materia = $id_materia";
+            return toba::db('libro_unco')->consultar($sql);
+        }
 
 }
 

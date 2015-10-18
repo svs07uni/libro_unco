@@ -10,15 +10,17 @@ class dt_observacion extends toba_datos_tabla
 		}
 		if (isset($filtro['id_plan'])) {
                         $from = 'obs_plan ';
-			$where[] = 'id_entidad = '.$filtro['id_plan']['valor'];
+                        $where[] = 'id_entidad = '.$filtro['id_plan']['valor'];
 		}
                 if (isset($filtro['id_materia'])) {
                         $from = 'obs_mat ';
-			$where[] = "id_entidad = ".$filtro['id_materia']['valor'];
+                        if($filtro['id_materia']['valor'] != -1)
+                            $where[] = "id_entidad = ".$filtro['id_materia']['valor'];
 		}
                 if (isset($filtro['id_modulo'])) {
                         $from = 'obs_mod ';
-			$where[] = "id_entidad = ".$filtro['id_modulo']['valor'];
+                        if($filtro['id_modulo']['valor'] != -1)
+                            $where[] = "id_entidad = ".$filtro['id_modulo']['valor'];
 		}
 		$sql = "SELECT
 			id_observacion,

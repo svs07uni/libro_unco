@@ -20,10 +20,11 @@ class dt_persona extends toba_datos_tabla
                 $where[] = 'genero = '.$filtro['genero']['valor'];
             }
             if(isset($filtro['id_sector'])){
-                $where[] = 'id_sector = '.$filtro['id_sector']['valor'];
+                $where[] = 't_p.id_sector = '.$filtro['id_sector']['valor'];
             }
 		$sql = "SELECT
-			t_t.nombre as titulo,
+			t_t.id_titulo,
+                        t_t.nombre as titulo,
 			t_p.tipo_doc,
 			t_p.genero,
 			t_s.nombre as id_sector_nombre,

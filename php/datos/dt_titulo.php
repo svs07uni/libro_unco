@@ -3,7 +3,7 @@ class dt_titulo extends toba_datos_tabla
 {
 	function get_descripciones($genero = null)
 	{//print_r($genero);exit();
-            if(!is_null($genero) && strcasecmp($genero, 'Masculino') ==0 )
+            if(!is_null($genero) && $genero=='Masculino')
                 $sexo = 'false';
             else
                 $sexo = 'true';

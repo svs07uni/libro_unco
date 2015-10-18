@@ -21,10 +21,10 @@ class dt_modulo extends toba_datos_tabla
 			$where[] = "t_m.nombre ILIKE ".quote("%{$filtro['nombre']['valor']}%");
 		}
 		if (isset($filtro['tipo_modulo'])) {
-			$where[] = "tipo_modulo ILIKE ".quote("%{$filtro['tipo_modulo']['valor']}%");
+			$where[] = "t_tm.nombre ILIKE ".quote("%{$filtro['tipo_modulo']['valor']}%");
 		}
                 if (isset($filtro['modulo_padre'])) {
-			$where[] = "t_m.modulo_padre ILIKE ".quote("%{$filtro['modulo_padre']['valor']}%");
+			$where[] = "t_mp.nombre ILIKE ".quote("%{$filtro['modulo_padre']['valor']}%");
 		}
                 if (isset($filtro['id_plan'])) {
 			$where[] = "t_m.id_plan = ".$filtro['id_plan']['valor'];

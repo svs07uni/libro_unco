@@ -68,10 +68,10 @@ class dt_materia extends toba_datos_tabla
 			$where[] = "t_m.anio_cursado = ".($filtro['anio_cursado']['valor']);
 		}
                 if (isset($filtro['periodo'])) {
-			$where[] = "periodo ILIKE ".quote("%{$filtro['periodo']['valor']}%");
+			$where[] = "t_p.nombre ILIKE ".quote("%{$filtro['periodo']['valor']}%");
 		}
                 if (isset($filtro['optativa'])) {
-			$where[] = "t_m.optativa = ".$filtro['optativa']['valor'];
+			$where[] = "t_m.optativa = '".(($filtro['optativa']['valor']=='si')?true:false)."'";
 		}
 		if (isset($filtro['id_plan'])) {
 			$where[] = "t_m.id_plan = ".$filtro['id_plan']['valor'];

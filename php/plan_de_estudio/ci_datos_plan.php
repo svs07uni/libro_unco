@@ -190,7 +190,8 @@ class ci_datos_plan extends ci_plan_de_estudio
 	//-----------------------------------------------------------------------------------
         
 	function conf__form_observacion(libro_unco_ei_formulario $form)
-	{//Ya existe el plan cargado
+	{
+            //Ya existe el plan cargado
             $obs = $this->controlador()->dep('datos')->tabla('obs_plan')->get();
             if(!isset($obs)){//No existe observación cargada en memoria
                 //Se busca en la base de datos  
@@ -359,12 +360,8 @@ class ci_datos_plan extends ci_plan_de_estudio
 	function conf__cuadro_secciones(libro_unco_ei_cuadro $cuadro)
 	{
             $this->s__datos_filtro['id_plan']['valor'] = $this->controlador->s__id_plan;
-            if(isset($this->s__datos_filtro)){
-                $cuadro->set_datos($this->controlador()->dep('datos')->tabla('seccion')->get_listado($this->s__datos_filtro));
-            }
-            else{
-                $cuadro->set_datos($this->controlador()->dep('datos')->tabla('seccion')->get_listado());
-            }
+            $cuadro->set_datos($this->controlador()->dep('datos')->tabla('seccion')->get_listado($this->s__datos_filtro));
+            
 	}
 
 	function evt__cuadro_secciones__seleccion($seleccion)

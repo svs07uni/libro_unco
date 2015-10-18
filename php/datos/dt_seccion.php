@@ -13,6 +13,9 @@ class dt_seccion extends toba_datos_tabla
                 if (isset($filtro['contenido'])) {
 			$where[] = "contenido ILIKE ".quote("%{$filtro['contenido']['valor']}%");
 		}
+                if (isset($filtro['titulo'])) {
+			$where[] = "titulo ILIKE ".quote("%{$filtro['titulo']['valor']}%");
+		}
 		if (isset($filtro['id_titulo'])) {
 			$where[] = "id_titulo = ".$filtro['id_titulo']['valor'];
 		}

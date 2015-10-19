@@ -111,7 +111,7 @@ class ci_unidad_academica extends toba_ci
                 $fp = fopen($datos['imagen']['tmp_name'], 'rb');
                 $this->dep('datos')->tabla('unidad_academica')->set_blob('imagen', $fp);
             }
-            $this->dep('datos')->sincronizar();
+            $this->dep('datos')->tabla('unidad_academica')->sincronizar();
             $this->resetear();
             $this->disparar_limpieza_memoria();
             $this->set_pantalla('pant_ua');
@@ -119,7 +119,7 @@ class ci_unidad_academica extends toba_ci
 
 	function evt__form_datos__cancelar()
 	{
-            $this->resetear();
+            $this->dep('datos')->tabla('unidad_academica')->resetear();
             $this->disparar_limpieza_memoria();
             $this->set_pantalla('pant_ua');
 	}

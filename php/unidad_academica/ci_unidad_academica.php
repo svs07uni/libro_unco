@@ -41,7 +41,7 @@ class ci_unidad_academica extends toba_ci
 
 	function evt__cuadro_ua__seleccion($seleccion)
 	{
-            $this->dep('datos')->cargar($seleccion);
+            $this->dep('datos')->tabla('unidad_academica')->cargar($seleccion);
             
             $this->set_pantalla('pant_datos');
 	}
@@ -74,7 +74,7 @@ class ci_unidad_academica extends toba_ci
 
 	function conf__form_datos(libro_unco_ei_formulario $form)
 	{
-            if ($this->dep('datos')->esta_cargada()) {
+            if ($this->dep('datos')->tabla('unidad_academica')->esta_cargada()) {
                     $this->dep('form_datos')->ef('sigla')->set_solo_lectura();
                     $ar = $this->dep('datos')->tabla('unidad_academica')->get();
                     $fp_imagen = $this->dep('datos')->tabla('unidad_academica')->get_blob('imagen',$ar['x_dbr_clave']);

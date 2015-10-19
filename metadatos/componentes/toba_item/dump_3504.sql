@@ -17,8 +17,8 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	'0', --carpeta
 	'0', --nivel_acceso
 	'web', --solicitud_tipo
-	'toba', --pagina_tipo_proyecto
-	'logon', --pagina_tipo
+	'libro_unco', --pagina_tipo_proyecto
+	'tp_libro_unco', --pagina_tipo
 	'toba', --actividad_buffer_proyecto
 	'0', --actividad_buffer
 	'toba', --actividad_patron_proyecto

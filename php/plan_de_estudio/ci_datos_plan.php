@@ -46,7 +46,7 @@ class ci_datos_plan extends ci_plan_de_estudio
                     }
                 }
                 $ar['areas'] = $this->s__areas;
-                
+            
                 return $ar;
             }
             else{//Es plan nuevo, oculto las pantallas y el evento guardar propio del controlador
@@ -60,15 +60,18 @@ class ci_datos_plan extends ci_plan_de_estudio
                 $this->evento('listo')->ocultar();
             }            
 	}
-
+        //protected $s__imagen_plan;
 	function evt__form_plan__guardar($datos)
 	{             
+            //$this->s__imagen_plan = $datos['imagen'];
+                    
             $this->s__areas = $datos['areas'];
             $datos['nombre'] = strtoupper($datos['nombre']);
             $datos['titulo'] = strtoupper($datos['titulo']);
             $datos['iniciales_siu'] = strtoupper($datos['iniciales_siu']);
             $datos['id_unidad_academica'] = $this->controlador->s__sigla;
             $this->controlador()->dep('datos')->tabla('plan_estudio')->set($datos);
+            
             $ar = $this->controlador()->dep('datos')->tabla('plan_estudio')->get();
             $this->controlador->s__id_plan = $ar['id_plan'];            
 	}
@@ -398,6 +401,10 @@ class ci_datos_plan extends ci_plan_de_estudio
 	//-----------------------------------------------------------------------------------
         function evt__guardar(){
             try{//Actualización de datos entre plan_estudio y area
+                if(isset($this->s__imagen_plan)){
+                    $fp = fopen($this->s__imagen_plan['tmp_name'], 'rb');
+                    $this->controlador()->dep('datos')->tabla('plan_estudio')->set_blob('imagen', $fp);
+                }
                 $this->controlador()->dep('datos')->tabla('plan_estudio')->sincronizar();
                 $sql = "DELETE FROM pertenece WHERE id_plan = ".$this->controlador->s__id_plan;
                 toba::db('libro_unco')->consultar($sql);

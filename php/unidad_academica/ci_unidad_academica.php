@@ -128,8 +128,6 @@ class ci_unidad_academica extends toba_ci
 	//---- pant_sede --------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
         function conf__cuadro_sedes(libro_unco_ei_cuadro $cuadro){
-            //$filtro['id_plan']['valor'] = $this->controlador->s__id_plan;
-            //    $cuadro->set_datos($this->controlador()->dep('datos')->tabla('sede')->get_listado($filtro));
             $this->dep('cuadro_sedes')->set_titulo($this->s__sigla);
             $filtro['id_unidad_academica']['valor'] = $this->s__sigla;
             $this->s__lista_sedes = $this->controlador()->dep('datos')->tabla('sede')->get_listado($filtro);
@@ -167,9 +165,10 @@ class ci_unidad_academica extends toba_ci
                 
 	function evt__form_sede__guardar($datos)
 	{
-            $datos['id_plan'] = $this->controlador->s__id_plan;
+            $datos['id_unidad_academica'] = $this->s__sigla;
             //$this->s__sedes .= $datos;print_r($this->s__sedes);exit();
             $this->controlador()->dep('datos')->tabla('sede')->set($datos); 
+            $this->controlador()->dep('datos')->tabla('sede')->sincronizar();
             $this->controlador()->dep('datos')->tabla('sede')->resetear();
         }
         

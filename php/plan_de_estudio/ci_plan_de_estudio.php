@@ -29,7 +29,20 @@ class ci_plan_de_estudio extends toba_ci
                         $excel->setActiveSheetIndex(0)->setCellValue($celda, mb_convert_encoding($campo,"UTF8"));//con utf8_decode no se visualiza bien
                     }
                     $celda = chr($columna).$fila;
-                    $excel->setActiveSheetIndex(0)->setCellValue($celda, mb_convert_encoding($dato,"UTF8"));//con utf8_decode no se visualiza bien
+                    if(strcasecmp($campo, 'nivel') == 0)
+                            switch($dato){
+                                case 0://grado
+                                    $excel->setActiveSheetIndex(0)->setCellValue($celda, "Grado");
+                                    break;
+                                case 1://posgrado
+                                    $excel->setActiveSheetIndex(0)->setCellValue($celda, "Posgrado");
+                                    break;
+                                case -1://pregrado
+                                    $excel->setActiveSheetIndex(0)->setCellValue($celda, "Pregrado");
+                                    break;
+                            }
+                    else  //demas campos  
+                        $excel->setActiveSheetIndex(0)->setCellValue($celda, mb_convert_encoding($dato,"UTF8"));//con utf8_decode no se visualiza bien
                     $columna ++;
                 }
                 $fila ++;

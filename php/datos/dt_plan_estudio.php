@@ -11,6 +11,7 @@ class dt_plan_estudio extends toba_datos_tabla
                   t_pe.iniciales_siu,
                   t_pe.nombre,
                   t_pe.titulo,
+                  t_pe.nivel,
                   t_pe.ordenanza,
                   t_pe.cant_inscriptos,
                   t_pe.clave_preinscripcion,
@@ -49,6 +50,27 @@ class dt_plan_estudio extends toba_datos_tabla
             $where = array();
             if(isset($filtro['titulo'])){
                 $where[] = 't_pe.titulo ILIKE '.quote("%{$filtro['titulo']['valor']}%");
+            }
+            if(isset($filtro['nivel'])){
+                if(strcasecmp($filtro['nivel']['condicion'], "es_igual_a")==0){//condicion de igualdad
+                    if(strcasecmp($filtro['nivel']['valor'], "Grado")==0)
+                        $where[] = 't_pe.nivel = 0';
+                    else
+                        if(strcasecmp($filtro['nivel']['valor'], "Pregrado")==0)
+                            $where[] = 't_pe.nivel = -1';
+                        else//posgrado
+                            $where[] = 't_pe.nivel = 1';
+                }
+                else{//condicion distinta
+                    if(strcasecmp($filtro['nivel']['valor'], "Grado")==0)
+                        $where[] = 't_pe.nivel <> 0';
+                    else
+                        if(strcasecmp($filtro['nivel']['valor'], "Pregrado")==0)
+                            $where[] = 't_pe.nivel <> -1';
+                        else//posgrado
+                            $where[] = 't_pe.nivel <> 1';
+                }
+                
             }
             if(isset($filtro['ordenanza'])){
                 $where[] = 't_pe.ordenanza = '.$filtro['ordenanza']['valor'];

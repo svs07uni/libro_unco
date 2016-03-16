@@ -14,8 +14,8 @@ class ci_unidad_academica extends toba_ci
                 $filtro->set_datos($this->s__datos_filtro);
             }
 	}
-
-	function evt__filtro_ua__filtrar($datos)
+        
+        function evt__filtro_ua__filtrar($datos)
 	{
             $this->s__datos_filtro = $datos;
 	}
@@ -186,6 +186,15 @@ class ci_unidad_academica extends toba_ci
 	{
 		$this->dep('datos')->resetear();
 	}
+        
+        //-----------------------------------------------------------------------------------
+	//---- AJAX --------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+        function ajax__get_caracteristica($id_localidad, toba_ajax_respuesta $respuesta){
+            $ar = $this->dep('datos')->tabla('localidad')->get_caracteristica($id_localidad);
+            $respuesta -> set( $ar['caracteristica'] );
+        }
 
 }
 ?>

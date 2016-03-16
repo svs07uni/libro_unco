@@ -11,6 +11,12 @@ class dt_localidad extends toba_datos_tabla
             return $ar;
 	}
         
+        function get_caracteristica($id_localidad){
+            $sql = "SELECT caracteristica FROM localidad WHERE id_localidad = $id_localidad";
+            $ar = toba::db('libro_unco')->consultar($sql);
+            return $ar[0];
+        }
+        
 	function get_listado($filtro = null)
 	{
             $where = "";

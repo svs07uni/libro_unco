@@ -18,7 +18,7 @@ class ci_datos_plan extends ci_plan_de_estudio
 	//---- pant_datos -------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------
-	//---- form_cargo -------------------------------------------------------------------
+	//---- form_plan -------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 
 	function conf__form_plan(libro_unco_ei_formulario $form)
@@ -47,6 +47,15 @@ class ci_datos_plan extends ci_plan_de_estudio
                 }
                 $ar['areas'] = $this->s__areas;
             
+                //Nivel pregrado, grado o posgrado
+                if($ar['nivel'] == 0)
+                    $ar['nivel'] = 'Grado';
+                else
+                    if($ar['nivel'] == 1)
+                        $ar['nivel'] = 'Posgrado';
+                    else
+                        $ar['nivel'] = 'Pregrado';
+                
                 return $ar;
             }
             else{//Es plan nuevo, oculto las pantallas y el evento guardar propio del controlador
@@ -64,10 +73,27 @@ class ci_datos_plan extends ci_plan_de_estudio
 	function evt__form_plan__guardar($datos)
 	{             
             //$this->s__imagen_plan = $datos['imagen'];
-                    
+            
             $this->s__areas = $datos['areas'];
             $datos['nombre'] = strtoupper($datos['nombre']);
             $datos['titulo'] = strtoupper($datos['titulo']);
+            
+            //pregrado o grado o postgrado
+            if(strcasecmp($datos['nivel'], 'Grado') == 0){//Se eligió nivel Grado
+                if($datos['duracion']<8){//Carrera menor a 4 años
+                    toba::notificacion()->agregar("La duración de este plan no es apropiado para un nivel de grado","error");
+                    return false;//Corto la ejecución normal de esta operacion
+                }
+                else
+                    $datos['nivel'] = 0;
+            }
+            else{
+                if(strcasecmp($datos['nivel'], 'Pregrado') == 0)//Se eligió nivel Pregrado
+                    $datos['nivel'] = -1;
+                else//Se eligió nivel Posgrado
+                    $datos['nivel'] = 1;
+            }
+            
             $datos['iniciales_siu'] = strtoupper($datos['iniciales_siu']);
             $datos['id_unidad_academica'] = $this->controlador->s__sigla;
             $this->controlador()->dep('datos')->tabla('plan_estudio')->set($datos);
@@ -127,18 +153,20 @@ class ci_datos_plan extends ci_plan_de_estudio
             $this->s__lista_sedes = $this->controlador()->dep('datos')->tabla('sede')->get_listado($filtro);
                        
             if(isset($this->s__sedes_seleccionados)){//Observo de forma local lo seleccionado, por si luego se presiona cancelar
+                if($this->s__sedes_seleccionados != -1){
                 //solo se tienen los ids de las sedes, busco más informacion de estas sedes
                 $sedes_seleccionadas = $this->controlador()->dep('datos')->tabla('sede')->listar_sedes($this->s__sedes_seleccionados);
                 
                 //Concatena las sedes, primero lo seleccionado y luego el resto
                 $this->s__lista_sedes = array_merge($sedes_seleccionadas, $this->s__lista_sedes);
-                
+                }
             }
             else{//Si no hay nada cargado de forma local busco en BD
                 
                 //Obtiene todas las sedes ya confirmadas que son sedes dictadas
                 $sedes_dictado = $this->controlador()->dep('datos')->tabla('se_dicta')->listar_sedes_de_plan($this->controlador->s__id_plan);
                 if(count($sedes_dictado)>0){
+                    $this->s__sedes_seleccionados = $sedes_dictado;
                     //Concatena las sedes, primero lo seleccionado y luego el resto
                     $this->s__lista_sedes = array_merge($sedes_dictado, $this->s__lista_sedes);
                 }
@@ -158,15 +186,22 @@ class ci_datos_plan extends ci_plan_de_estudio
         }
         
         function evt__cuadro_sede__dictado($sede){//Se activa cuando se cambia de pantalla
-           $this->s__sedes_seleccionados = $sede;
+           if(isset($sede))
+               $this->s__sedes_seleccionados = $sede;
+           else
+               //Es -1 para que no se confunda cuando no hay sedes cargadas de forma local
+               $this->s__sedes_seleccionados = -1;//Caso especial que no hay nada seleccionado
            
         }
         
+        //Se ejecuta cuando se carga el cuadro
         function conf_evt__cuadro_sede__dictado(toba_evento_usuario $evento, $fila){
            //s__lista_sede son todas las sedes que se muestra en el cuadro
             //s__sedes_seleccionados son las sedes que ya fueron seleccionados
-            if(isset($this->s__sedes_seleccionados)){//Ya existen sedes seleccionados
-                $evento->set_check_activo($this->es_sede($this->s__lista_sedes[$fila]['id_sede'], $this->s__sedes_seleccionados));
+            
+            if(isset($this->s__sedes_seleccionados)){//Ya existen sedes seleccionados o hay ninguna sede seleccionadas en forma local pedido por el usuario
+                if($this->s__sedes_seleccionados != -1)//Por si fuera el caso especial que no hay sedes seleccionadas
+                    $evento->set_check_activo($this->es_sede($this->s__lista_sedes[$fila]['id_sede'], $this->s__sedes_seleccionados));
                 
             }
             else{//Recuperar de la BD
@@ -424,7 +459,7 @@ class ci_datos_plan extends ci_plan_de_estudio
                 $sql = "DELETE FROM se_dicta WHERE id_plan = ".$this->controlador->s__id_plan;
                 toba::db('libro_unco')->consultar($sql);
                 $dictados = $this->s__sedes_seleccionados;
-                if(isset($dictados)){
+                if(isset($dictados) && $dictados != -1){
                     foreach($dictados as $key => $sede){
                         $s_d['id_sede'] = $sede['id_sede'];
                         $s_d['id_plan'] = $this->controlador->s__id_plan;
@@ -433,6 +468,7 @@ class ci_datos_plan extends ci_plan_de_estudio
                         $this->controlador()->dep('datos')->tabla('se_dicta')->resetear();
                     }
                 }
+                
                 
             }catch(toba_error_validacion $e){
                 

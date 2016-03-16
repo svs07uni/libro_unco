@@ -22,10 +22,10 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --objeto_categoria
 	'Agregar Localidad - Cuadro.', --nombre
 	NULL, --titulo
-	NULL, --colapsable
+	'0', --colapsable
 	NULL, --descripcion
-	'libro_unco', --fuente_datos_proyecto
-	'libro_unco', --fuente_datos
+	NULL, --fuente_datos_proyecto
+	NULL, --fuente_datos
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
@@ -37,7 +37,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_f
 	NULL, --usuario
 	'2015-10-08 15:15:13', --creacion
-	NULL  --posicion_botonera
+	'abajo'  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
 
@@ -92,20 +92,20 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	NULL, --sql
 	'id_localidad', --columnas_clave
 	NULL, --columna_descripcion
-	NULL, --clave_dbr
+	'0', --clave_dbr
 	NULL, --archivos_callbacks
 	'100%', --ancho
-	NULL, --ordenar
-	NULL, --paginar
+	'0', --ordenar
+	'0', --paginar
 	NULL, --tamano_pagina
-	NULL, --tipo_paginado
+	'P', --tipo_paginado
 	'0', --mostrar_total_registros
 	'1', --eof_invisible
 	NULL, --eof_customizado
 	'0', --siempre_con_titulo
-	NULL, --exportar_paginado
-	NULL, --exportar
-	NULL, --exportar_rtf
+	'0', --exportar_paginado
+	'0', --exportar
+	'0', --exportar_rtf
 	NULL, --pdf_propiedades
 	NULL, --pdf_respetar_paginacion
 	NULL, --asociacion_columnas
@@ -133,9 +133,43 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
 	'libro_unco', --objeto_cuadro_proyecto
 	'2656', --objeto_cuadro
-	'1095', --objeto_cuadro_col
+	'1098', --objeto_cuadro_col
+	'id_provincia_nombre', --clave
+	'4', --orden
+	'Provincia', --titulo
+	'ei-cuadro-col-tit', --estilo_titulo
+	'4', --estilo
+	NULL, --ancho
+	'1', --formateo
+	NULL, --vinculo_indice
+	NULL, --no_ordenar
+	NULL, --mostrar_xls
+	NULL, --mostrar_pdf
+	NULL, --pdf_propiedades
+	NULL, --desabilitado
+	NULL, --total
+	NULL, --total_cc
+	NULL, --usar_vinculo
+	NULL, --vinculo_carpeta
+	NULL, --vinculo_item
+	NULL, --vinculo_popup
+	NULL, --vinculo_popup_param
+	NULL, --vinculo_target
+	NULL, --vinculo_celda
+	NULL, --vinculo_servicio
+	'0', --permitir_html
+	NULL, --grupo
+	NULL  --evento_asociado
+);
+--- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 10
+INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
+	'libro_unco', --objeto_cuadro_proyecto
+	'2656', --objeto_cuadro
+	'10000029', --objeto_cuadro_col
 	'nombre', --clave
-	'0', --orden
+	'1', --orden
 	'Nombre', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -157,21 +191,21 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	NULL, --vinculo_target
 	NULL, --vinculo_celda
 	NULL, --vinculo_servicio
-	NULL, --permitir_html
+	'0', --permitir_html
 	NULL, --grupo
 	NULL  --evento_asociado
 );
 INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
 	'libro_unco', --objeto_cuadro_proyecto
 	'2656', --objeto_cuadro
-	'1096', --objeto_cuadro_col
+	'10000030', --objeto_cuadro_col
 	'cp', --clave
-	'1', --orden
+	'2', --orden
 	'Cp', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'0', --estilo
 	NULL, --ancho
-	'7', --formateo
+	'1', --formateo
 	NULL, --vinculo_indice
 	NULL, --no_ordenar
 	NULL, --mostrar_xls
@@ -188,48 +222,17 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	NULL, --vinculo_target
 	NULL, --vinculo_celda
 	NULL, --vinculo_servicio
-	NULL, --permitir_html
+	'0', --permitir_html
 	NULL, --grupo
 	NULL  --evento_asociado
 );
 INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
 	'libro_unco', --objeto_cuadro_proyecto
 	'2656', --objeto_cuadro
-	'1097', --objeto_cuadro_col
+	'10000031', --objeto_cuadro_col
 	'caracteristica', --clave
-	'2', --orden
-	'Caracteristica', --titulo
-	'ei-cuadro-col-tit', --estilo_titulo
-	'0', --estilo
-	NULL, --ancho
-	'7', --formateo
-	NULL, --vinculo_indice
-	NULL, --no_ordenar
-	NULL, --mostrar_xls
-	NULL, --mostrar_pdf
-	NULL, --pdf_propiedades
-	NULL, --desabilitado
-	NULL, --total
-	NULL, --total_cc
-	NULL, --usar_vinculo
-	NULL, --vinculo_carpeta
-	NULL, --vinculo_item
-	NULL, --vinculo_popup
-	NULL, --vinculo_popup_param
-	NULL, --vinculo_target
-	NULL, --vinculo_celda
-	NULL, --vinculo_servicio
-	NULL, --permitir_html
-	NULL, --grupo
-	NULL  --evento_asociado
-);
-INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
-	'libro_unco', --objeto_cuadro_proyecto
-	'2656', --objeto_cuadro
-	'1098', --objeto_cuadro_col
-	'id_provincia_nombre', --clave
 	'3', --orden
-	'Id Provincia', --titulo
+	'Caracteristica', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho
@@ -250,8 +253,8 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	NULL, --vinculo_target
 	NULL, --vinculo_celda
 	NULL, --vinculo_servicio
-	NULL, --permitir_html
+	'0', --permitir_html
 	NULL, --grupo
 	NULL  --evento_asociado
 );
---- FIN Grupo de desarrollo 0
+--- FIN Grupo de desarrollo 10

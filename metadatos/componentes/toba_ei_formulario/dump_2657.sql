@@ -22,7 +22,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --objeto_categoria
 	'Agregar Localidad - Form', --nombre
 	NULL, --titulo
-	NULL, --colapsable
+	'0', --colapsable
 	NULL, --descripcion
 	'libro_unco', --fuente_datos_proyecto
 	'libro_unco', --fuente_datos
@@ -37,7 +37,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_f
 	NULL, --usuario
 	'2015-10-08 15:15:13', --creacion
-	NULL  --posicion_botonera
+	'abajo'  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
 
@@ -201,8 +201,8 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase
 	NULL, --auto_reset
 	NULL, --ancho
-	NULL, --ancho_etiqueta
-	NULL, --expandir_descripcion
+	'150px', --ancho_etiqueta
+	'0', --expandir_descripcion
 	NULL, --campo_bl
 	NULL, --scroll
 	NULL, --filas
@@ -219,8 +219,8 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --ev_seleccion
 	NULL, --alto
 	NULL, --analisis_cambios
-	NULL, --no_imprimir_efs_sin_estado
-	NULL, --resaltar_efs_con_estado
+	'0', --no_imprimir_efs_sin_estado
+	'0', --resaltar_efs_con_estado
 	NULL, --template
 	NULL  --template_impresion
 );
@@ -238,8 +238,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'ef_editable', --elemento_formulario
 	'nombre', --columnas
 	'0', --obligatorio
-	NULL, --oculto_relaja_obligatorio
-	'0', --orden
+	'0', --oculto_relaja_obligatorio
+	'1', --orden
 	'Nombre', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -318,8 +318,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'ef_editable_numero', --elemento_formulario
 	'cp', --columnas
 	'0', --obligatorio
-	NULL, --oculto_relaja_obligatorio
-	'1', --orden
+	'0', --oculto_relaja_obligatorio
+	'2', --orden
 	'Cp', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -395,11 +395,11 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'2657', --objeto_ei_formulario
 	'libro_unco', --objeto_ei_formulario_proyecto
 	'caracteristica', --identificador
-	'ef_editable_numero', --elemento_formulario
+	'ef_editable', --elemento_formulario
 	'caracteristica', --columnas
 	'0', --obligatorio
-	NULL, --oculto_relaja_obligatorio
-	'2', --orden
+	'0', --oculto_relaja_obligatorio
+	'3', --orden
 	'Caracteristica', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -478,9 +478,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'ef_combo', --elemento_formulario
 	'id_provincia', --columnas
 	'0', --obligatorio
-	NULL, --oculto_relaja_obligatorio
-	'3', --orden
-	'Id Provincia', --etiqueta
+	'0', --oculto_relaja_obligatorio
+	'4', --orden
+	'Provincia', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	NULL, --colapsado

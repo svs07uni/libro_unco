@@ -198,34 +198,6 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'libro_unco', --objeto_proyecto
 	'2562', --objeto
-	'1070', --col_id
-	'coordenadas_x', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'sede'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'libro_unco', --objeto_proyecto
-	'2562', --objeto
-	'1071', --col_id
-	'coordenadas_y', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'sede'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'libro_unco', --objeto_proyecto
-	'2562', --objeto
 	'1094', --col_id
 	'interno_1', --columna
 	'E', --tipo
@@ -280,3 +252,34 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'sede'  --tabla
 );
 --- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 10
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'libro_unco', --objeto_proyecto
+	'2562', --objeto
+	'10000021', --col_id
+	'coordenadas_x', --columna
+	'N', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'sede'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'libro_unco', --objeto_proyecto
+	'2562', --objeto
+	'10000022', --col_id
+	'coordenadas_y', --columna
+	'N', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'sede'  --tabla
+);
+--- FIN Grupo de desarrollo 10

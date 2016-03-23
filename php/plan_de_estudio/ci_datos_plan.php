@@ -343,9 +343,7 @@ class ci_datos_plan extends ci_plan_de_estudio
             if(isset($this->s__datos_filtro)){
                 $datos = $this->controlador()->dep('datos')->tabla('materia')->get_listado($this->s__datos_filtro);
             }
-            for($i=0; $i<sizeof($datos); $i++){
-                $datos[0]['optativa'] = $datos[0]['optativa']?"Sí":"No";               
-            }
+            
             return $datos;
 	}
 

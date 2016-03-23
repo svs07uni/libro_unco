@@ -111,6 +111,21 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 -- apex_objeto_dependencias
 ------------------------------------------------------------
 
+--- INICIO Grupo de desarrollo 10
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'libro_unco', --proyecto
+	'10000059', --dep_id
+	'2583', --objeto_consumidor
+	'10000044', --objeto_proveedor
+	'ci_materia', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+--- FIN Grupo de desarrollo 10
+
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'libro_unco', --proyecto
@@ -190,18 +205,6 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2583', --objeto_consumidor
 	'2618', --objeto_proveedor
 	'form_localidad', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'libro_unco', --proyecto
-	'1468', --dep_id
-	'2583', --objeto_consumidor
-	'2609', --objeto_proveedor
-	'form_materia', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -421,8 +424,8 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'libro_unco', --proyecto
 	'1300', --pantalla
 	'2583', --objeto_ci
-	'0', --orden
-	'1468'  --dep_id
+	'1', --orden
+	'10000059'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'libro_unco', --proyecto

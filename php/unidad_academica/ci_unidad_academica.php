@@ -147,9 +147,10 @@ class ci_unidad_academica extends toba_ci
         //-----------------------------------------------------------------------------------
 	//---- form_sede -------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
-
+        protected $s__datos_sede;//para mantener los datos del formulario cuando ocurre un error
+        
 	function conf__form_sede(libro_unco_ei_formulario $form){
-            
+                        
             $sede = $this->controlador()->dep('datos')->tabla('sede')->get();
             if(isset($sede)){//Encontre en memoria o BD
                 if(isset($sede['id_localidad'])){
@@ -158,34 +159,46 @@ class ci_unidad_academica extends toba_ci
                     
                     $sede['id_provincia'] = $localidad[0]['id_provincia'];
                 }
-
+                
                 return $sede;
+            }
+            else{//Si hay datos temporales cargados pero ocurrio un error en chequeo
+                if(isset($this->s__datos_sede)){
+                    return $this->s__datos_sede;
+                }
             }
         }
                 
 	function evt__form_sede__guardar($datos)
 	{
             $datos['id_unidad_academica'] = $this->s__sigla;
-            //$this->s__sedes .= $datos;print_r($this->s__sedes);exit();
+            
+            $datos['coordenadas_x'] = floatval(str_replace(',', '.', $datos['coordenadas_x']));
+            $datos['coordenadas_y'] = floatval(str_replace(',', '.', $datos['coordenadas_y']));
+            
+            if($datos['coordenadas_x']>180 || $datos['coordenadas_x']<-180){
+                toba::notificacion()->agregar("Longitud no válida",'error');
+                $this->s__datos_sede = $datos;
+                return $datos;
+            }
+            if($datos['coordenadas_y']>90 || $datos['coordenadas_y']<-90){
+                toba::notificacion()->agregar("Latitud no válida",'error');
+                $this->s__datos_sede = $datos;
+                return $datos;
+            }                
+            
             $this->controlador()->dep('datos')->tabla('sede')->set($datos); 
             $this->controlador()->dep('datos')->tabla('sede')->sincronizar();
             $this->controlador()->dep('datos')->tabla('sede')->resetear();
-        }
-        
-        function evt__form_sede__limpiar(){
-            $this->controlador()->dep('datos')->tabla('sede')->resetear();
+            $this->s__datos_sede = null;
         }
         
         function evt__form_sede__volver(){
             $this->dep('datos')->resetear();
+            $this->s__datos_sede = null;
             $this->set_pantalla('pant_ua');
         }
 	
-        
-        function resetear()
-	{
-		$this->dep('datos')->resetear();
-	}
         
         //-----------------------------------------------------------------------------------
 	//---- AJAX --------------------------------------------------------------------------

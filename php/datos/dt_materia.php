@@ -55,6 +55,8 @@ class dt_materia extends toba_datos_tabla
         $sql = "delete from materia where id_materia = ".$id_materia;
         toba::db('libro_unco')->consultar($sql);
     }
+    
+     
     function get_listado($filtro=array())
 	{
 		$where = array();
@@ -105,7 +107,45 @@ class dt_materia extends toba_datos_tabla
                 return toba::db('libro_unco')->consultar($sql);
                 
 	}
-
+        
+        //Metodo para combo editable
+        function get_materia($id_materia = null){
+            if (! isset($id_materia)) {//ninguna materia
+			return array();
+		}
+            $sql = "SELECT 
+                                    id_materia, 
+                                    nombre
+                            FROM 
+                                    materia
+                            WHERE
+                                    id_materia = $id_materia";
+            $ar = toba::consultar($sql);	
+            if (! empty($ar)) {
+                return $ar[0]['nombre'];
+            }
+        }
+        
+        //Metodo para combo editable llamado del ci_materia
+    function get_nombres($filtro=array(), $id_plan){
+        $w = '';
+        if (isset($filtro)) {
+                $w = "t_m.nombre ILIKE ".quote("%{$filtro}%");
+        }
+        
+        $sql = "SELECT
+			t_m.id_materia,
+                        t_m.nombre
+                        
+		FROM
+			materia as t_m	
+                
+                WHERE t_m.id_plan = $id_plan"
+                . " AND $w"
+                . " ORDER BY nombre;";
+		
+        return toba::db('libro_unco')->consultar($sql);
+    }
 }
 
 ?>

@@ -14,12 +14,13 @@ class ci_plan_de_estudio extends toba_ci
         
         function vista_excel(toba_vista_excel $salida){
             $salida->set_nombre_archivo($this->s__sigla.".xls");
+            $this->s__datos_filtro['sigla']['valor'] = $this->s__sigla;
             $excel = $salida->get_excel();
             $cabecera=false;//para determinar si escribir los nombre de campo en la fila 1
             $fila = 2;
             $columna = 65;//caracter A 
             //chr(66) devuelve letra de ascii
-            $datos = $this->dep('datos')->tabla('plan_estudio')->listar_planes($this->s__sigla);
+            $datos = $this->dep('datos')->tabla('plan_estudio')->listar_planes($this->s__datos_filtro);
             //print_r($datos[1]);
             foreach($datos as $key => $valor){//Itera sobre los planes
                 $salida->set_hoja_nombre('Planes');
@@ -51,7 +52,7 @@ class ci_plan_de_estudio extends toba_ci
                 
             }
             //Los vuelvo a obtener porque en la otra consulta traia las sedes entonces repetia registros para distintas sedes
-            $datos = $this->dep('datos')->tabla('plan_estudio')->get_ids($this->s__sigla);
+            $datos = $this->dep('datos')->tabla('plan_estudio')->get_ids($this->s__datos_filtro);
             $hoja=1;$cabecera = false;
             foreach($datos as $key => $valor){//Itera sobre los planes
                 $nombre_hoja = is_null($valor['iniciales_siu'])? "Plan":$valor['iniciales_siu'];
@@ -137,6 +138,15 @@ class ci_plan_de_estudio extends toba_ci
                 $this->s__sigla = $sigla;
             $this->dep('cuadro_planes')->set_titulo($this->s__sigla);
             $this->s__datos_filtro['sigla']['valor'] = $this->s__sigla;
+            
+            //Obtener el perfil funcional por si es posgrado
+            $u = toba::manejador_sesiones()->get_perfiles_funcionales();
+            $p = array_search('posgrado', $u);
+            if($p !== false){//Ingreso con perfil posgrado
+                $this->s__datos_filtro['nivel']['condicion'] = "es_igual_a";
+                $this->s__datos_filtro['nivel']['valor'] = "Posgrado";//nivel de posgrado
+            }
+            
             $cuadro->set_datos($this->dep('datos')->tabla('plan_estudio')->get_listado($this->s__datos_filtro));
             
 	}

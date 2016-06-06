@@ -1,11 +1,98 @@
 <?php
 class dt_plan_estudio extends toba_datos_tabla
 {
-    function get_ids($id_ua){//Para exportar
-        $sql = "SELECT id_plan, iniciales_siu,nombre FROM plan_estudio WHERE id_unidad_academica='$id_ua'";
-        return toba::db('libro_unco')->consultar($sql);
+    function get_ids($filtro){//Para exportar
+        $where = array();
+            if(isset($filtro['titulo'])){
+                $where[] = 't_pe.titulo ILIKE '.quote("%{$filtro['titulo']['valor']}%");
+            }
+            if(isset($filtro['nivel'])){
+                if(strcasecmp($filtro['nivel']['condicion'], "es_igual_a")==0){//condicion de igualdad
+                    if(strcasecmp($filtro['nivel']['valor'], "Grado")==0)
+                        $where[] = 't_pe.nivel = 0';
+                    else
+                        if(strcasecmp($filtro['nivel']['valor'], "Pregrado")==0)
+                            $where[] = 't_pe.nivel = -1';
+                        else//posgrado
+                            $where[] = 't_pe.nivel = 1';
+                }
+                else{//condicion distinta
+                    if(strcasecmp($filtro['nivel']['valor'], "Grado")==0)
+                        $where[] = 't_pe.nivel <> 0';
+                    else
+                        if(strcasecmp($filtro['nivel']['valor'], "Pregrado")==0)
+                            $where[] = 't_pe.nivel <> -1';
+                        else//posgrado
+                            $where[] = 't_pe.nivel <> 1';
+                }
+                
+            }
+            if(isset($filtro['ordenanza'])){
+                $where[] = 't_pe.ordenanza = '.$filtro['ordenanza']['valor'];
+            }
+            if(isset($filtro['iniciales_siu'])){
+                $where[] = 't_pe.iniciales_siu ILIKE '.quote("%{$filtro['iniciales_siu']['valor']}%");
+            }
+            if(isset($filtro['nombre'])){
+                $where[] = 't_pe.nombre ILIKE '.quote("%{$filtro['nombre']['valor']}%");
+            }
+            if(isset($filtro['sigla'])){
+                $where[] = 't_pe.id_unidad_academica ILIKE '.quote("{$filtro['sigla']['valor']}");
+            }
+            
+            if(isset($filtro['id_plan'])){
+                $where[] = "t_pe.id_plan = ".$filtro['id_plan']['valor']."";
+            }
+		$sql = "SELECT t_pe.id_plan, t_pe.iniciales_siu,t_pe.nombre "
+                        . "FROM plan_estudio t_pe";
+		if(count($where)>0){
+                    $sql = sql_concatenar_where($sql, $where);
+                }
+                $sql = $sql." ORDER BY t_pe.nombre";
+                return toba::db('libro_unco')->consultar($sql);        
     }
-    function listar_planes ($id_ua){
+    function listar_planes ($filtro){
+        $where = array();
+            if(isset($filtro['titulo'])){
+                $where[] = 't_pe.titulo ILIKE '.quote("%{$filtro['titulo']['valor']}%");
+            }
+            if(isset($filtro['nivel'])){
+                if(strcasecmp($filtro['nivel']['condicion'], "es_igual_a")==0){//condicion de igualdad
+                    if(strcasecmp($filtro['nivel']['valor'], "Grado")==0)
+                        $where[] = 't_pe.nivel = 0';
+                    else
+                        if(strcasecmp($filtro['nivel']['valor'], "Pregrado")==0)
+                            $where[] = 't_pe.nivel = -1';
+                        else//posgrado
+                            $where[] = 't_pe.nivel = 1';
+                }
+                else{//condicion distinta
+                    if(strcasecmp($filtro['nivel']['valor'], "Grado")==0)
+                        $where[] = 't_pe.nivel <> 0';
+                    else
+                        if(strcasecmp($filtro['nivel']['valor'], "Pregrado")==0)
+                            $where[] = 't_pe.nivel <> -1';
+                        else//posgrado
+                            $where[] = 't_pe.nivel <> 1';
+                }
+                
+            }
+            if(isset($filtro['ordenanza'])){
+                $where[] = 't_pe.ordenanza = '.$filtro['ordenanza']['valor'];
+            }
+            if(isset($filtro['iniciales_siu'])){
+                $where[] = 't_pe.iniciales_siu ILIKE '.quote("%{$filtro['iniciales_siu']['valor']}%");
+            }
+            if(isset($filtro['nombre'])){
+                $where[] = 't_pe.nombre ILIKE '.quote("%{$filtro['nombre']['valor']}%");
+            }
+            
+            if(isset($filtro['id_plan'])){
+                $where[] = "t_pe.id_plan = ".$filtro['id_plan']['valor']."";
+            }
+            if(isset($filtro['sigla'])){
+                $where[] = 't_pe.id_unidad_academica ILIKE '.quote("{$filtro['sigla']['valor']}");
+            }
         $sql = "SELECT 
                   t_pe.id_plan,
                   t_pe.iniciales_siu,
@@ -41,8 +128,11 @@ class dt_plan_estudio extends toba_datos_tabla
                 LEFT OUTER JOIN provincia as t_p ON t_p.id_provincia=t_l.id_provincia
                 LEFT OUTER JOIN pertenece as t_pert ON t_pert.id_plan = t_pe.id_plan
                 LEFT OUTER JOIN area as t_a ON t_a.id_area = t_pert.id_area
-                WHERE t_pe.id_unidad_academica = '$id_ua'
                 ";
+        if(count($where)>0){
+                    $sql = sql_concatenar_where($sql, $where);
+                }
+                $sql = $sql." ORDER BY t_pe.nombre";
         return toba::db('libro_unco')->consultar($sql);
     }
    function get_listado($filtro = array())

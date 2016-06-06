@@ -12,6 +12,7 @@ class ci_datos_plan extends ci_plan_de_estudio
 	
     
     protected $s__datos_filtro;
+    protected $s__datos_form;//auxiliar para no resetear el form luego de que se produjo un error
     
         
         //-----------------------------------------------------------------------------------
@@ -23,8 +24,16 @@ class ci_datos_plan extends ci_plan_de_estudio
 
 	function conf__form_plan(libro_unco_ei_formulario $form)
 	{
-            
+            $u = toba::manejador_sesiones()->get_perfiles_funcionales();
+                $p = array_search('posgrado', $u);
+                if($p !== false){//Ingreso con perfil posgrado
+                    $this->dep('form_plan')->ef('nivel')->set_solo_lectura(true);
+                }
             if(isset($this->controlador->s__id_plan)){//Existen datos de este plan
+                //oculto los botones del formulario inicial
+                $this->dep('form_plan')->evento('crear')->ocultar();
+                $this->dep('form_plan')->evento('cancelar')->ocultar();
+                
                 $filtro['id_plan']['valor'] = $this->controlador->s__id_plan;
                 $ar = $this->controlador()->dep('datos')->tabla('plan_estudio')->get();
                 if(!isset($ar)){//No hay nada cargado en memoria ent buscar en BD, en el caso que se presionó cancelar
@@ -67,6 +76,9 @@ class ci_datos_plan extends ci_plan_de_estudio
                 $this->evento('guardar')->ocultar();
                 $this->evento('cancelar')->ocultar();
                 $this->evento('listo')->ocultar();
+                
+                $this->s__datos_form['nivel'] = "Posgrado";
+                return $this->s__datos_form;
             }            
 	}
         //protected $s__imagen_plan;
@@ -103,7 +115,30 @@ class ci_datos_plan extends ci_plan_de_estudio
 	}
         
         function evt__form_plan__crear($datos){
+            $this->s__areas = $datos['areas'];
+            $datos['nombre'] = strtoupper($datos['nombre']);
+            $datos['titulo'] = strtoupper($datos['titulo']);
+            
+            //pregrado o grado o postgrado
+            if(strcasecmp($datos['nivel'], 'Grado') == 0){//Se eligió nivel Grado
+                if($datos['duracion']<8){//Carrera menor a 4 años
+                    toba::notificacion()->agregar("La duración de este plan no es apropiado para un nivel de grado","error");
+                    $this->s__datos_form = $datos;
+                    return true;//Corto la ejecución normal de esta operacion
+                }
+                else
+                    $datos['nivel'] = 0;
+            }
+            else{
+                if(strcasecmp($datos['nivel'], 'Pregrado') == 0)//Se eligió nivel Pregrado
+                    $datos['nivel'] = -1;
+                else//Se eligió nivel Posgrado
+                    $datos['nivel'] = 1;
+            }
+            
+            $datos['iniciales_siu'] = strtoupper($datos['iniciales_siu']);
             $datos['id_unidad_academica'] = $this->controlador->s__sigla;
+            
             $this->controlador()->dep('datos')->tabla('plan_estudio')->set($datos);
             $this->controlador()->dep('datos')->tabla('plan_estudio')->sincronizar();
             

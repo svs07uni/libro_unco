@@ -98,7 +98,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'0', --implicito
 	'0', --defecto
 	NULL, --display_datos_cargados
-	'no_cargado', --grupo
+	NULL, --grupo
 	NULL, --accion
 	NULL, --accion_imphtml_debug
 	NULL, --accion_vinculo_carpeta
@@ -131,7 +131,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'0', --implicito
 	'0', --defecto
 	NULL, --display_datos_cargados
-	'no_cargado', --grupo
+	NULL, --grupo
 	NULL, --accion
 	NULL, --accion_imphtml_debug
 	NULL, --accion_vinculo_carpeta

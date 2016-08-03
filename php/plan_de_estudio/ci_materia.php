@@ -36,7 +36,7 @@ class ci_materia extends ci_plan_de_estudio{
                 return $mat;                
             }
             else{
-                $o = $this->controlador()->dep('datos')->tabla('materia')->get_max_orden($this->s__id_plan);
+                $o = $this->controlador()->dep('datos')->tabla('materia')->get_max_orden($this->controlador->s__id_plan);
                 if(count($o)>0){
                     $mat['orden'] = $o[0]['orden']+1;
                     return $mat;

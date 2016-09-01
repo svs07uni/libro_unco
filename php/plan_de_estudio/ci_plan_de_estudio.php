@@ -41,6 +41,9 @@ class ci_plan_de_estudio extends toba_ci
                                 case -1://pregrado
                                     $excel->setActiveSheetIndex(0)->setCellValue($celda, "Pregrado");
                                     break;
+                                case 2://ciclo de licenciatura
+                                    $excel->setActiveSheetIndex(0)->setCellValue($celda, "Ciclo de Licenciatura");
+                                    break;
                             }
                     else  //demas campos  
                         $excel->setActiveSheetIndex(0)->setCellValue($celda, mb_convert_encoding($dato,"UTF8"));//con utf8_decode no se visualiza bien

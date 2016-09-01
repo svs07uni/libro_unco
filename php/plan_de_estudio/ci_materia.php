@@ -52,8 +52,10 @@ class ci_materia extends ci_plan_de_estudio{
             $datos['nombre'] = strtoupper($datos['nombre']);
             
             $this->controlador()->dep('datos')->tabla('materia')->set($datos);
-                        
+            $this->controlador()->dep('datos')->tabla('materia')->sincronizar();
+            
             $mat = $this->controlador()->dep('datos')->tabla('materia')->get();
+            
             $this->s__id_materia = $mat['id_materia'];
             
             if(isset($datos['una_observacion'])){//Tiene alguna observacion
@@ -65,7 +67,7 @@ class ci_materia extends ci_plan_de_estudio{
             }  
             $this->s__nro_materia = $datos['orden'];
             
-            $this->controlador()->dep('datos')->tabla('materia')->sincronizar();
+            
         
         
         $this->controlador()->dep('datos')->tabla('materia')->resetear();

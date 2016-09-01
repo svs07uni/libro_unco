@@ -56,14 +56,17 @@ class ci_datos_plan extends ci_plan_de_estudio
                 }
                 $ar['areas'] = $this->s__areas;
             
-                //Nivel pregrado, grado o posgrado
+                //Nivel pregrado, grado, posgrado o ciclo de licenciatura(nuevo)
                 if($ar['nivel'] == 0)
                     $ar['nivel'] = 'Grado';
                 else
                     if($ar['nivel'] == 1)
                         $ar['nivel'] = 'Posgrado';
                     else
-                        $ar['nivel'] = 'Pregrado';
+                        if($ar['nivel'] == 2)
+                            $ar['nivel'] = 'Ciclo de Licenciatura';
+                        else
+                            $ar['nivel'] = 'Pregrado';
                 
                 return $ar;
             }
@@ -81,16 +84,14 @@ class ci_datos_plan extends ci_plan_de_estudio
                 return $this->s__datos_form;
             }            
 	}
-        //protected $s__imagen_plan;
+        
 	function evt__form_plan__guardar($datos)
 	{             
-            //$this->s__imagen_plan = $datos['imagen'];
-            
             $this->s__areas = $datos['areas'];
             $datos['nombre'] = strtoupper($datos['nombre']);
             $datos['titulo'] = strtoupper($datos['titulo']);
             
-            //pregrado o grado o postgrado
+            //pregrado o grado o postgrado o ciclo de licenciatura
             if(strcasecmp($datos['nivel'], 'Grado') == 0){//Se eligió nivel Grado
                 if($datos['duracion']<8){//Carrera menor a 4 años
                     toba::notificacion()->agregar("La duración de este plan no es apropiado para un nivel de grado","error");
@@ -102,8 +103,19 @@ class ci_datos_plan extends ci_plan_de_estudio
             else{
                 if(strcasecmp($datos['nivel'], 'Pregrado') == 0)//Se eligió nivel Pregrado
                     $datos['nivel'] = -1;
-                else//Se eligió nivel Posgrado
-                    $datos['nivel'] = 1;
+                else//Se eligió nivel 
+                    if(strcasecmp($datos['nivel'], 'Posgrado') == 0)//Se eligió nivel Posgrado
+                        $datos['nivel'] = 1;
+                    else{//Se eligió nivel ciclo de licenciatura
+                        if($datos['duracion']<4){//Carrera menor a 2 años
+                            toba::notificacion()->agregar("La duración de este plan no es apropiado para un ciclo de licenciatura","error");
+                            return false;//Corto la ejecución normal de esta operacion
+                        }
+                        else
+                            $datos['nivel'] = 2;
+                        
+                    }
+                        
             }
             
             $datos['iniciales_siu'] = strtoupper($datos['iniciales_siu']);
@@ -119,12 +131,11 @@ class ci_datos_plan extends ci_plan_de_estudio
             $datos['nombre'] = strtoupper($datos['nombre']);
             $datos['titulo'] = strtoupper($datos['titulo']);
             
-            //pregrado o grado o postgrado
+            //pregrado o grado o postgrado o ciclo de licenciatura
             if(strcasecmp($datos['nivel'], 'Grado') == 0){//Se eligió nivel Grado
                 if($datos['duracion']<8){//Carrera menor a 4 años
                     toba::notificacion()->agregar("La duración de este plan no es apropiado para un nivel de grado","error");
-                    $this->s__datos_form = $datos;
-                    return true;//Corto la ejecución normal de esta operacion
+                    return false;//Corto la ejecución normal de esta operacion
                 }
                 else
                     $datos['nivel'] = 0;
@@ -132,8 +143,19 @@ class ci_datos_plan extends ci_plan_de_estudio
             else{
                 if(strcasecmp($datos['nivel'], 'Pregrado') == 0)//Se eligió nivel Pregrado
                     $datos['nivel'] = -1;
-                else//Se eligió nivel Posgrado
-                    $datos['nivel'] = 1;
+                else//Se eligió nivel posgrado o ciclo 
+                    if(strcasecmp($datos['nivel'], 'Posgrado') == 0)//Se eligió nivel Posgrado
+                        $datos['nivel'] = 1;
+                    else{//Se eligió nivel ciclo de licenciatura
+                        if($datos['duracion']<4){//Carrera menor a 2 años
+                            toba::notificacion()->agregar("La duración de este plan no es apropiado para un ciclo de licenciatura","error");
+                            return false;//Corto la ejecución normal de esta operacion
+                        }
+                        else
+                            $datos['nivel'] = 2;
+                        
+                    }
+                        
             }
             
             $datos['iniciales_siu'] = strtoupper($datos['iniciales_siu']);

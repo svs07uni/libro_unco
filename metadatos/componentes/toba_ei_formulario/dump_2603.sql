@@ -710,7 +710,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_consulta_php
 	NULL, --carga_sql
 	'libro_unco', --carga_fuente
-	'Grado, Pregrado, Posgrado', --carga_lista
+	'Grado, Pregrado, Posgrado, Ciclo de Licenciatura', --carga_lista
 	NULL, --carga_col_clave
 	NULL, --carga_col_desc
 	NULL, --carga_maestros
